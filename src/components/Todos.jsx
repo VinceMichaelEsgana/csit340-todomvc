@@ -1,6 +1,7 @@
 import { useState } from 'react'
 const [todos, setTodos] = useState([])
 const [text, setText] = useState('')
+
 function Todos() {
 
     const [text, setText] = useState('')
@@ -28,9 +29,19 @@ function Todos() {
     function handleDelete(id) {
         setTodos(todos.filter((todo) => todo.id !== id))
     }
+    function handleClearCompleted() {
+        setTodos(todos.filter((todo) => !todo.completed))
+    }
+
+    const activeCount = todos.filter((todo) => !todo.completed).length
+
+    const allCompleted = todos.every((todo) => todo.completed)
+
+    function handleToggleAll() {
+        setTodos(todos.map((todo) => ({ ...todo, completed: !allCompleted })))
+    }
 
 
-const activeCount = todos.filter((todo) => !todo.completed).length
 
     return (
         <section className="mx-auto max-w-[550px]">
@@ -52,7 +63,10 @@ const activeCount = todos.filter((todo) => !todo.completed).length
 
 
                         <main className="relative border-t border-[#e6e6e6]">
+
                             <input id="toggle-all" type="checkbox" className="peer sr-only" />
+                            checked={allCompleted}
+                            onChange={handleToggleAll}
                             <label
                                 htmlFor="toggle-all"
                                 className="absolute -top-[66px] left-0 flex h-[65px] w-[60px] cursor-pointer items-center justify-center text-[22px] text-[#949494] peer-checked:text-[#484848]"
@@ -111,9 +125,10 @@ const activeCount = todos.filter((todo) => !todo.completed).length
                         </main>
 
                         <footer className="grid h-10 grid-cols-3 items-center border-t border-[#e6e6e6] px-[15px] text-[15px]">
+
                             <span>
                                 <strong className="font-light">{activeCount}</strong>{' '}
-  {activeCount === 1 ? 'item' : 'items'} left
+                                {activeCount === 1 ? 'item' : 'items'} left
                             </span>
                             <ul className="flex justify-center gap-1">
                                 <li>
@@ -141,9 +156,15 @@ const activeCount = todos.filter((todo) => !todo.completed).length
                                     </button>
                                 </li>
                             </ul>
-                            <button type="button" className="cursor-pointer justify-self-end hover:underline">
-                                Clear completed
-                            </button>
+                            {hasCompleted && (
+                                <button
+                                    type="button"
+                                    onClick={handleClearCompleted}
+                                    className="cursor-pointer justify-self-end hover:underline"
+                                >
+                                    Clear completed
+                                </button>
+                            )}
                         </footer>
                     </>
                 )}
