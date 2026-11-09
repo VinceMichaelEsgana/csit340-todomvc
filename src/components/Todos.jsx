@@ -41,8 +41,17 @@ function Todos() {
         setTodos(todos.map((todo) => ({ ...todo, completed: !allCompleted })))
     }
 
+    const [filter, setFilter] = useState('all')
+
+    const visibleTodos = todos.filter((todo) => {
+  if (filter === 'active') return !todo.completed
+  if (filter === 'completed') return todo.completed
+  return true
+})
 
 
+const selected = 'cursor-pointer rounded-[3px] border border-[#b83f45]/20 px-[7px] py-[3px]'
+const notSelected = 'cursor-pointer rounded-[3px] border border-transparent px-[7px] py-[3px] hover:border-[#b83f45]/10'
     return (
         <section className="mx-auto max-w-[550px]">
             <h1 className="text-center text-[80px] font-extralight text-[#b83f45]">
@@ -51,9 +60,9 @@ function Todos() {
 
             <div className="relative bg-white shadow-[0_2px_4px_0_rgba(0,0,0,0.2),0_25px_50px_0_rgba(0,0,0,0.1)]">
                 <form onSubmit={handleSubmit}>
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
                     <input
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
                         className="h-[65px] w-full py-4 pr-4 pl-[60px] text-2xl shadow-[inset_0_-2px_1px_rgba(0,0,0,0.03)] outline-none placeholder:text-black/40 placeholder:italic focus:shadow-[0_0_2px_2px_#cf7d7d]"
                         placeholder="What needs to be done?"
                     />
